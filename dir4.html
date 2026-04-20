@@ -59,6 +59,21 @@ textarea{
   background:#fefafe;
   position:relative; z-index:2;
 }
+.save-btn-container {
+  text-align: right;
+  margin-top: 10px;
+  position:relative; z-index:2;
+}
+#saveBtn {
+  padding: 10px 20px;
+  background: #9966ff;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 16px;
+  border: 3px solid #d9b3ff;
+  cursor: pointer;
+}
 .back{
   display:block;
   text-align:center;
@@ -78,8 +93,28 @@ textarea{
 </div>
 
 <div class="reply-title">你有什么想对我说的吗？</div>
-<textarea placeholder="在这里写你想对我说的话吧~"></textarea>
+<textarea id="replyText" placeholder="在这里写你想对我说的话吧~"></textarea>
+<div class="save-btn-container">
+  <button id="saveBtn">保存</button>
+</div>
 
 <a href="index.html" class="back">返回首页</a>
+
+<script>
+// 页面加载时读取保存的内容
+window.onload = function() {
+  const savedText = localStorage.getItem('ananReply');
+  if (savedText) {
+    document.getElementById('replyText').value = savedText;
+  }
+};
+
+// 保存按钮点击事件
+document.getElementById('saveBtn').addEventListener('click', function() {
+  const text = document.getElementById('replyText').value;
+  localStorage.setItem('ananReply', text);
+  alert('保存成功啦！');
+});
+</script>
 </body>
 </html>
