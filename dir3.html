@@ -28,23 +28,72 @@ body::before{
   text-align:center;
   font-size:28px;
   color:#9966ff;
-  margin-bottom:35px;
+  margin-bottom:30px;
   text-shadow:2px 2px #e6ccff;
+  position:relative; z-index:2;
+}
+.add-box{
+  display:flex;
+  gap:10px;
+  margin-bottom:25px;
+  position:relative; z-index:2;
+}
+#addInput{
+  flex:1;
+  padding:14px 16px;
+  border:3px solid #e6ccff;
+  border-radius:16px;
+  font-size:15px;
+  background:#fff;
+  outline:none;
+}
+#addBtn{
+  padding:14px 20px;
+  background:#9966ff;
+  color:#fff;
+  font-weight:bold;
+  border:none;
+  border-radius:16px;
+  border:3px solid #d9b3ff;
+}
+.wish-list{
   position:relative; z-index:2;
 }
 .wish-item{
   background:#fff;
   border:3px solid #e6ccff;
   border-radius:20px;
-  padding:18px;
+  padding:16px 18px;
   margin-bottom:14px;
-  box-shadow:0 6px 0 #d9b3ff;
-  position:relative; z-index:2;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  box-shadow:0 4px 0 #d9b3ff;
+}
+.check{
+  width:24px;
+  height:24px;
+  border:2px solid #9966ff;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:transparent;
+  flex-shrink:0;
+}
+.check.checked{
+  background:#9966ff;
+  color:#fff;
+}
+.text{
+  flex:1;
+  font-size:15px;
+  line-height:1.5;
 }
 .back{
   display:block;
   text-align:center;
-  margin-top:30px;
+  margin-top:35px;
   font-size:17px;
   font-weight:bold;
   color:#7a43e6;
@@ -53,22 +102,83 @@ body::before{
 }
 </style>
 </head>
+
 <body>
 <h1 class="page-title">想和安安一起</h1>
 
-<div class="wish-item">1. 做一次饭给安安吃</div>
-<div class="wish-item">2. 一起去画石膏娃娃</div>
-<div class="wish-item">3. 一起去迪士尼</div>
-<div class="wish-item">4. 一起去旅游</div>
-<div class="wish-item">5. 一起拼豆</div>
-<div class="wish-item">6. 一起去海边散步</div>
-<div class="wish-item">7. 一起吃番茄蜜薯条</div>
-<div class="wish-item">8. 一起养小宠物</div>
-<div class="wish-item">9. 做布丁给安安吃</div>
-<div class="wish-item">10. 合照，本来准备拍一个，我们两个手比个心，然后那个心中间是这个花的还有字，旁边整个我的猫</div>
-<div class="wish-item">11. 一起听歌距离截屏</div>
-<div class="wish-item">12. 一起看电影</div>
+<div class="add-box">
+  <input type="text" id="addInput" placeholder="输入想和安安一起做的事…">
+  <button id="addBtn">添加</button>
+</div>
+
+<div class="wish-list" id="wishList">
+  <!-- 内容由 JS 自动加载 -->
+</div>
 
 <a href="index.html" class="back">返回首页</a>
+
+<script>
+// 初始愿望清单（你原来的全部保留）
+const defaultList = [
+  { text:"做一次饭给安安吃", done:false },
+  { text:"一起去画石膏娃娃", done:false },
+  { text:"一起去迪士尼", done:false },
+  { text:"一起去旅游", done:false },
+  { text:"一起拼豆", done:false },
+  { text:"一起去海边散步", done:false },
+  { text:"一起吃番茄蜜薯条", done:false },
+  { text:"一起养小宠物", done:false },
+  { text:"做布丁给安安吃", done:false },
+  { text:"合照，本来准备拍一个，我们两个手比个心，然后那个心中间是这个花的还有字，旁边整个我的猫", done:false },
+  { text:"一起听歌距离截屏", done:false },
+  { text:"一起看电影", done:false }
+];
+
+// 读取本地保存
+let list = JSON.parse(localStorage.getItem("wishList")) || defaultList;
+
+// 渲染列表
+function render(){
+  const box = document.getElementById("wishList");
+  box.innerHTML = "";
+  list.forEach((it, idx) => {
+    const item = document.createElement("div");
+    item.className = "wish-item";
+    item.innerHTML = `
+      <div class="check ${it.done?'checked':''}" data-idx="${idx}">✓</div>
+      <div class="text">${it.text}</div>
+    `;
+    box.appendChild(item);
+  });
+
+  // 点击切换勾选
+  document.querySelectorAll(".check").forEach(el => {
+    el.onclick = () => {
+      const i = el.dataset.idx;
+      list[i].done = !list[i].done;
+      save();
+      render();
+    }
+  });
+}
+
+// 保存到本地
+function save(){
+  localStorage.setItem("wishList", JSON.stringify(list));
+}
+
+// 添加新愿望
+document.getElementById("addBtn").onclick = () => {
+  const val = document.getElementById("addInput").value.trim();
+  if(!val) return;
+  list.push({ text:val, done:false });
+  document.getElementById("addInput").value = "";
+  save();
+  render();
+};
+
+// 初始化
+render();
+</script>
 </body>
 </html>
