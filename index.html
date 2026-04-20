@@ -3,51 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuromi-Themed Design</title>
-    <style>
-        body {
-            background-color: #E0A5E0; /* Kuromi's color */
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            color: #4B0082; /* Dark purple */
-        }
-        .carousel {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-        }
-        .carousel img {
-            width: 100%;
-            border-radius: 15px;
-        }
-        .music-player {
-            margin: 20px 0;
-            text-align: center;
-        }
-    </style>
+    <title>Kuromi Themed Music Player</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to My Kuromi-Themed Page!</h1>
-    <div class="carousel">
-        <img src="kuromi1.jpg" alt="Kuromi Image 1">
-        <img src="kuromi2.jpg" alt="Kuromi Image 2" style="display:none;">
-        <img src="kuromi3.jpg" alt="Kuromi Image 3" style="display:none;">
-    </div>
-    <button onclick="nextImage()">Next Image</button>
-    <div class="music-player">
-        <audio controls loop>
-            <source src="music.mp3" type="audio/mpeg">
+    <header>
+        <h1>Kuromi Themed Music Player</h1>
+        <nav>
+            <ul>
+                <li><a href="#music">Music</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section id="music">
+        <h2>Your Favorite Tunes</h2>
+        <audio controls>
+            <source src="music/your_favorite_song.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-    </div>
-    <script>
-        let currentIndex = 0;
-        const images = document.querySelectorAll('.carousel img');
-
-        function nextImage() {
-            images[currentIndex].style.display = 'none';
-            currentIndex = (currentIndex + 1) % images.length;
-            images[currentIndex].style.display = 'block';
-        }
-    </script>
+    </section>
+    <section id="gallery">
+        <h2>Image Carousel Gallery</h2>
+        <div class="carousel">
+            <img src="images/kuromi1.jpg" alt="Kuromi 1">
+            <img src="images/kuromi2.jpg" alt="Kuromi 2">
+            <img src="images/kuromi3.jpg" alt="Kuromi 3">
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2026 Kuromi Music Player. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>
