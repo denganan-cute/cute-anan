@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>想问安安</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"微软雅黑",sans-serif}
+body{
+  background:#f9f0ff;
+  background-image: radial-gradient(circle, #f0e0ff 1px, transparent 1px);
+  background-size:20px 20px;
+  padding:50px 20px;
+  max-width:700px;
+  margin:0 auto;
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed;
+  top:10px; left:10px; right:10px; bottom:10px;
+  border:4px dashed #d9b3ff;
+  border-radius:30px;
+  pointer-events:none;
+  z-index:1;
+}
+.page-title{
+  text-align:center;
+  font-size:28px;
+  color:#9966ff;
+  margin-bottom:35px;
+  text-shadow:2px 2px #e6ccff;
+  position:relative; z-index:2;
+}
+.item{
+  background:#fff;
+  border:3px solid #e6ccff;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:16px;
+  box-shadow:0 6px 0 #d9b3ff;
+  position:relative; z-index:2;
+}
+.question{
+  font-weight:bold;
+  margin-bottom:10px;
+  color:#333;
+}
+textarea{
+  width:100%;
+  height:85px;
+  border:2px solid #e6ccff;
+  border-radius:12px;
+  padding:10px;
+  font-size:15px;
+  background:#fefafe;
+}
+.back{
+  display:block;
+  text-align:center;
+  margin-top:30px;
+  font-size:17px;
+  font-weight:bold;
+  color:#7a43e6;
+  text-decoration:none;
+  position:relative; z-index:2;
+}
+</style>
+</head>
+<body>
+<h1 class="page-title">想问安安</h1>
+
+<div class="item">
+<div class="question">1. 你现在喜欢我什么？</div>
+<textarea></textarea>
+</div>
+<div class="item">
+<div class="question">2. 你可以许一个愿望，你会许？</div>
+<textarea></textarea>
+</div>
+<div class="item">
+<div class="question">3. 你感觉我有什么变化吗？</div>
+<textarea></textarea>
+</div>
+<div class="item">
+<div class="question">4. 你会觉得我对你没有一开始好吗？</div>
+<textarea></textarea>
+</div>
+<div class="item">
+<div class="question">5. 你觉得我有什么做的不好的吗？</div>
+<textarea></textarea>
+</div>
+<div class="item">
+<div class="question">6. 你最讨厌的是什么？</div>
+<textarea></textarea>
+</div>
+<div class="item">
+<div class="question">7. 生气了会想要被怎么哄？</div>
+<textarea></textarea>
+</div>
+<div class="item">
+<div class="question">8. 如果我许一个愿望你觉得会是什么？</div>
+<textarea></textarea>
+</div>
+
+<a href="index.html" class="back">返回首页</a>
+</body>
+</html>
