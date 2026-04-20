@@ -1,38 +1,427 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuromi Themed Music Player</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>库洛米音乐盒 - 猫头鹰安安</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FFE5EC 0%, #E5D4FF 100%);
+            background-attachment: fixed;
+            font-family: 'Comic Sans MS', '微软雅黑', cursive, sans-serif;
+            color: #5a3a7a;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 8px dashed #FF77AB;
+            border-radius: 40px;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: inset 0 0 20px rgba(255, 119, 171, 0.2);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 40px;
+            color: #FF77AB;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .music-box {
+            background: white;
+            border: 4px solid #FF77AB;
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(255, 119, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            position: relative;
+            transform: rotate(1deg);
+        }
+
+        .music-box::before {
+            content: "♪";
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 40px;
+            color: #FF77AB;
+            opacity: 0.3;
+        }
+
+        .music-title {
+            text-align: center;
+            font-size: 24px;
+            color: #FF77AB;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        audio {
+            width: 100%;
+            height: 45px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #FFE5EC 0%, #FFD1E3 100%);
+            cursor: pointer;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #FF77AB 0%, #FF5A92 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 119, 171, 0.3);
+            font-family: 'Comic Sans MS', cursive;
+            transform: rotate(-2deg);
+        }
+
+        .btn:hover {
+            transform: rotate(-2deg) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 119, 171, 0.4);
+        }
+
+        .btn:active {
+            transform: rotate(-2deg) scale(0.98);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #9966FF 0%, #7A43E6 100%);
+            transform: rotate(1deg);
+        }
+
+        .btn-secondary:hover {
+            transform: rotate(1deg) scale(1.05);
+        }
+
+        .gallery-section {
+            background: white;
+            border: 4px solid #9966FF;
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(153, 102, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .gallery-title {
+            text-align: center;
+            font-size: 24px;
+            color: #9966FF;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: #f9f9f9;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            object-fit: cover;
+        }
+
+        .carousel-image.active {
+            opacity: 1;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: 3px solid #9966FF;
+            color: #9966FF;
+            font-size: 30px;
+            padding: 10px 18px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: 10;
+            font-weight: bold;
+        }
+
+        .carousel-nav:hover {
+            background: #9966FF;
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-prev {
+            left: 15px;
+        }
+
+        .carousel-next {
+            right: 15px;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #DDD;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #9966FF;
+        }
+
+        .indicator.active {
+            background: #9966FF;
+            transform: scale(1.2);
+        }
+
+        .menu {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .menu-item {
+            background: linear-gradient(135deg, #FFE5EC 0%, #E5D4FF 100%);
+            border: 3px solid #FF77AB;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #5a3a7a;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: rotate(1deg);
+        }
+
+        .menu-item:hover {
+            transform: rotate(1deg) translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 119, 171, 0.3);
+            background: linear-gradient(135deg, #FFD1E3 0%, #D1B3FF 100%);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .volume-control input {
+            width: 150px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 28px;
+            }
+
+            .music-box, .gallery-section {
+                padding: 20px;
+            }
+
+            .carousel-nav {
+                padding: 8px 14px;
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Kuromi Themed Music Player</h1>
-        <nav>
-            <ul>
-                <li><a href="#music">Music</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-            </ul>
-        </nav>
-    </header>
-    <section id="music">
-        <h2>Your Favorite Tunes</h2>
-        <audio controls>
-            <source src="music/your_favorite_song.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-    </section>
-    <section id="gallery">
-        <h2>Image Carousel Gallery</h2>
-        <div class="carousel">
-            <img src="images/kuromi1.jpg" alt="Kuromi 1">
-            <img src="images/kuromi2.jpg" alt="Kuromi 2">
-            <img src="images/kuromi3.jpg" alt="Kuromi 3">
+    <div class="container">
+        <h1 class="title">♪ 库洛米音乐盒 ♪</h1>
+
+        <div class="music-box">
+            <div class="music-title">🎵 我的音乐盒</div>
+            <audio id="musicPlayer" controls loop>
+                <source src="旺仔小乔 - I Really Like You (17秒片段).mp3" type="audio/mpeg">
+                你的浏览器不支持音频元素
+            </audio>
+            
+            <div class="volume-control">
+                <label for="volumeSlider">🔊 音量：</label>
+                <input type="range" id="volumeSlider" min="0" max="100" value="70">
+            </div>
+
+            <div class="player-controls">
+                <button class="btn" onclick="playMusic()">▶ 播放</button>
+                <button class="btn" onclick="pauseMusic()">⏸ 暂停</button>
+                <button class="btn btn-secondary" onclick="toggleLoop()">🔁 单曲循环</button>
+            </div>
         </div>
-    </section>
-    <footer>
-        <p>&copy; 2026 Kuromi Music Player. All Rights Reserved.</p>
-    </footer>
+
+        <div class="gallery-section">
+            <div class="gallery-title">📸 我们的记忆</div>
+            <div class="carousel-container">
+                <div class="carousel-wrapper">
+                    <img class="carousel-image active" src="素材/13968D613755E4C1358D2BFD5F9DD45E.jpg" alt="Image 1">
+                    <img class="carousel-image" src="素材/172F309BECC87A288BC7C947667F263B.jpg" alt="Image 2">
+                    <img class="carousel-image" src="素材/1D1112B4E91B510077C07C6CD4819B65.jpg" alt="Image 3">
+                    <img class="carousel-image" src="素材/2495BC4DF88FFC4361EAAA36650A4112.jpg" alt="Image 4">
+                    <img class="carousel-image" src="素材/409FA9F1FD1344F9EE74357887EA01E7.jpg" alt="Image 5">
+                    <img class="carousel-image" src="素材/478C8459C68CACFB6BFEFDA5FD0E38CC.jpg" alt="Image 6">
+                    <img class="carousel-image" src="素材/555469D5D5624C3C024B314E0CD634DB.jpg" alt="Image 7">
+                    <img class="carousel-image" src="素材/8352FF7A145C338F5DD92A8A81BC82C7.jpg" alt="Image 8">
+                    <img class="carousel-image" src="素材/85B13CEC93B96F3434C51C03866FDACF.jpg" alt="Image 9">
+                    <img class="carousel-image" src="素材/9BB1511B2BFA657C6EAF19291D15CC80.jpg" alt="Image 10">
+                    <img class="carousel-image" src="素材/9E1425CC31FB8944BBE3F5E1B9A38D79.jpg" alt="Image 11">
+                    <img class="carousel-image" src="素材/B0D929DA3F378CB3F36FAA0271A845B6.jpg" alt="Image 12">
+                    <img class="carousel-image" src="素材/C005FEF6AEFF034AB781CA68A453DD07.jpg" alt="Image 13">
+                    <img class="carousel-image" src="素材/CC048C774DAD69FC5511A59A53B15335.jpg" alt="Image 14">
+                    <img class="carousel-image" src="素材/CC0DB50E56565C0F03390A0B80A5045C.jpg" alt="Image 15">
+                    <img class="carousel-image" src="素材/CF8E4E4847C75A1F0DE25F0FAC5D8851.jpg" alt="Image 16">
+                    <img class="carousel-image" src="素材/D83A37406CAF07F5CF82AD2D0ED6FBC7.jpg" alt="Image 17">
+                    <img class="carousel-image" src="素材/FFE44DA2A0A9A49290309E7E183FB53F.jpg" alt="Image 18">
+                </div>
+                <button class="carousel-nav carousel-prev" onclick="prevImage()">❮</button>
+                <button class="carousel-nav carousel-next" onclick="nextImage()">❯</button>
+            </div>
+
+            <div class="carousel-indicators" id="indicatorsContainer"></div>
+        </div>
+
+        <div class="menu">
+            <a href="dir1.html" class="menu-item">💕 我眼里的安安</a>
+            <a href="dir2.html" class="menu-item">❓ 想问安安</a>
+            <a href="dir3.html" class="menu-item">🌈 想和安安一起</a>
+            <a href="dir4.html" class="menu-item">💌 想对安安说</a>
+            <a href="album.html" class="menu-item">📖 我们的相册书</a>
+        </div>
+    </div>
+
+    <script>
+        const musicPlayer = document.getElementById('musicPlayer');
+        const volumeSlider = document.getElementById('volumeSlider');
+        let currentImageIndex = 0;
+        const images = document.querySelectorAll('.carousel-image');
+        const totalImages = images.length;
+        let isLooping = false;
+
+        // 生成指示器
+        const indicatorsContainer = document.getElementById('indicatorsContainer');
+        for (let i = 0; i < totalImages; i++) {
+            const indicator = document.createElement('span');
+            indicator.className = 'indicator' + (i === 0 ? ' active' : '');
+            indicator.onclick = () => goToImage(i);
+            indicatorsContainer.appendChild(indicator);
+        }
+
+        const indicators = document.querySelectorAll('.indicator');
+
+        function playMusic() {
+            musicPlayer.play();
+        }
+
+        function pauseMusic() {
+            musicPlayer.pause();
+        }
+
+        function toggleLoop() {
+            isLooping = !isLooping;
+            musicPlayer.loop = isLooping;
+            alert(isLooping ? '✓ 已开启单曲循环' : '✗ 已关闭单曲循环');
+        }
+
+        volumeSlider.addEventListener('input', function() {
+            musicPlayer.volume = this.value / 100;
+        });
+
+        function updateCarousel() {
+            images.forEach((img, index) => {
+                img.classList.toggle('active', index === currentImageIndex);
+            });
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentImageIndex);
+            });
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % totalImages;
+            updateCarousel();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+            updateCarousel();
+        }
+
+        function goToImage(index) {
+            currentImageIndex = index;
+            updateCarousel();
+        }
+
+        // 初始化
+        updateCarousel();
+        musicPlayer.volume = 0.7;
+        musicPlayer.loop = true;
+    </script>
 </body>
 </html>
