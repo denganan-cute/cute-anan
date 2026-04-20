@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我们的相册书</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"微软雅黑",sans-serif}
+body{
+  background:#f9f0ff;
+  background-image: radial-gradient(circle, #f0e0ff 1px, transparent 1px);
+  background-size:20px 20px;
+  padding:60px 20px;
+  max-width:700px;
+  margin:0 auto;
+  text-align:center;
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed;
+  top:10px; left:10px; right:10px; bottom:10px;
+  border:4px dashed #d9b3ff;
+  border-radius:30px;
+  pointer-events:none;
+  z-index:1;
+}
+.title{
+  font-size:28px;
+  color:#9966ff;
+  margin-bottom:40px;
+  text-shadow:2px 2px #e6ccff;
+  position:relative; z-index:2;
+}
+.desc{
+  font-size:17px;
+  color:#777;
+  margin-bottom:30px;
+  position:relative; z-index:2;
+}
+.back{
+  display:inline-block;
+  padding:12px 24px;
+  background:#9966ff;
+  color:#fff;
+  font-weight:bold;
+  border-radius:20px;
+  text-decoration:none;
+  border:3px solid #e6ccff;
+  box-shadow:0 6px 0 #d9b3ff;
+  position:relative; z-index:2;
+}
+</style>
+</head>
+<body>
+<h1 class="title">我们的相册书</h1>
+<div class="desc">相册内容稍后上传～</div>
+<a href="dir5.html" class="back">返回记忆碎片</a>
+</body>
+</html>
