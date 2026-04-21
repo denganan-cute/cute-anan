@@ -55,6 +55,20 @@ textarea{
   font-size:15px;
   background:#fefafe;
 }
+.save-box{
+  text-align:right;
+  margin:10px 0 25px;
+  position:relative; z-index:2;
+}
+#saveBtn{
+  padding:12px 24px;
+  background:#9966ff;
+  color:#fff;
+  font-weight:bold;
+  border:3px solid #d9b3ff;
+  border-radius:16px;
+  cursor:pointer;
+}
 .back{
   display:block;
   text-align:center;
@@ -70,39 +84,69 @@ textarea{
 <body>
 <h1 class="page-title">想问安安</h1>
 
+<div class="save-box">
+  <button id="saveBtn">💾 一键保存所有回答</button>
+</div>
+
 <div class="item">
 <div class="question">1. 你现在喜欢我什么？</div>
-<textarea></textarea>
+<textarea id="q1"></textarea>
 </div>
+
 <div class="item">
 <div class="question">2. 你可以许一个愿望，你会许？</div>
-<textarea></textarea>
+<textarea id="q2"></textarea>
 </div>
+
 <div class="item">
 <div class="question">3. 你感觉我有什么变化吗？</div>
-<textarea></textarea>
+<textarea id="q3"></textarea>
 </div>
+
 <div class="item">
 <div class="question">4. 你会觉得我对你没有一开始好吗？</div>
-<textarea></textarea>
+<textarea id="q4"></textarea>
 </div>
+
 <div class="item">
 <div class="question">5. 你觉得我有什么做的不好的吗？</div>
-<textarea></textarea>
+<textarea id="q5"></textarea>
 </div>
+
 <div class="item">
 <div class="question">6. 你最讨厌的是什么？</div>
-<textarea></textarea>
+<textarea id="q6"></textarea>
 </div>
+
 <div class="item">
 <div class="question">7. 生气了会想要被怎么哄？</div>
-<textarea></textarea>
+<textarea id="q7"></textarea>
 </div>
+
 <div class="item">
 <div class="question">8. 如果我许一个愿望你觉得会是什么？</div>
-<textarea></textarea>
+<textarea id="q8"></textarea>
 </div>
 
 <a href="index.html" class="back">返回首页</a>
+
+<script>
+// 自动加载保存的内容
+window.onload = function(){
+  for(let i=1;i<=8;i++){
+    let val = localStorage.getItem("answer_"+i);
+    if(val) document.getElementById("q"+i).value = val;
+  }
+};
+
+// 一键保存
+document.getElementById("saveBtn").onclick = function(){
+  for(let i=1;i<=8;i++){
+    let val = document.getElementById("q"+i).value;
+    localStorage.setItem("answer_"+i, val);
+  }
+  alert("✅ 全部回答保存成功啦！");
+};
+</script>
 </body>
 </html>
