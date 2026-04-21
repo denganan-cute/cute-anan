@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>礼物盒</title>
+<title>给安安的礼物盒</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"微软雅黑",sans-serif}
 body{
@@ -33,134 +33,163 @@ body::before{
   position:relative; z-index:2;
 }
 
-/* 礼物盒整体 */
-.gift-box{
-  width: 260px;
-  height: 260px;
-  margin: 50px auto;
-  position: relative;
-  z-index: 2;
-  transition: all 0.3s;
+/* 容器：保证礼盒和相册在同一位置 */
+.wrapper{
+  position:relative;
+  width:280px;
+  height:280px;
+  margin:40px auto;
+  z-index:2;
 }
-/* 盒盖 */
+
+/* 礼物盒 */
+.gift-box{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0; left:0;
+  z-index:3;
+  transition:all 0.3s;
+}
 .lid{
-  width: 280px;
-  height: 50px;
-  background: #ffc6f7;
-  border: 4px solid #9966ff;
-  border-radius: 12px;
-  margin: 0 auto;
-  position: relative;
-  box-shadow: 0 6px 0 #d9b3ff;
+  width:290px;
+  height:54px;
+  background:#ffdaf8;
+  border:4px solid #9966ff;
+  border-radius:14px;
+  margin:0 auto;
+  position:relative;
+  box-shadow:0 6px 0 #d9b3ff;
 }
 .lid::before{
-  content: "🎀";
-  position: absolute;
-  top: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 42px;
+  content:"🎀";
+  position:absolute;
+  top:-32px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:46px;
+  filter:drop-shadow(0 2px #dda8ff);
 }
-/* 盒身 */
 .box{
-  width: 260px;
-  height: 200px;
-  background: #fff;
-  border: 4px solid #9966ff;
-  border-radius: 0 0 20px 20px;
-  margin: -4px auto 0;
-  position: relative;
-  box-shadow: 0 8px 0 #d9b3ff;
+  width:260px;
+  height:210px;
+  background:#fff;
+  border:4px solid #9966ff;
+  border-radius:0 0 22px 22px;
+  margin:-4px auto 0;
+  position:relative;
+  box-shadow:0 8px 0 #d9b3ff;
 }
 .box::before{
-  content: "";
-  position: absolute;
-  left: 50%; top:0; bottom:0;
-  width: 5px;
-  background: #ff86d4;
-  transform: translateX(-50%);
+  content:"";
+  position:absolute;
+  left:50%; top:0; bottom:0;
+  width:5px;
+  background:#ff86d4;
+  transform:translateX(-50%);
 }
 .box::after{
-  content: "";
-  position: absolute;
-  top: 50%; left:0; right:0;
-  height: 5px;
-  background: #ff86d4;
-  transform: translateY(-50%);
+  content:"";
+  position:absolute;
+  top:50%; left:0; right:0;
+  height:5px;
+  background:#ff86d4;
+  transform:translateY(-50%);
 }
 
 /* 打开动画 */
 .gift-box.open .lid{
-  animation: lidUp 1.1s ease forwards;
+  animation:lidUp 1.1s ease forwards;
 }
 @keyframes lidUp{
-  0%{ transform: translateY(0) rotate(0); }
-  100%{ transform: translateY(-70px) rotate(-18deg); opacity: 0; }
+  0%{transform:translateY(0) rotate(0);}
+  100%{transform:translateY(-90px) rotate(-20deg); opacity:0;}
 }
 .gift-box.open .box{
-  animation: boxFade 1.1s ease forwards;
+  animation:boxFade 1.1s ease forwards;
 }
 @keyframes boxFade{
-  0%{ transform: scale(1); }
-  100%{ transform: scale(0.8); opacity: 0; }
+  0%{transform:scale(1);}
+  100%{transform:scale(0.8); opacity:0;}
 }
 
-/* 打开后显示的相册 */
+/* 相册（在礼盒正后方） */
 .album{
-  display: none;
-  position: relative;
-  z-index: 2;
-  margin-top: 40px;
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0; left:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
 }
 .album.show{
-  display: block;
-  animation: show 1s ease forwards;
+  opacity:1;
+  pointer-events:all;
+  animation:show 1s ease forwards;
 }
 @keyframes show{
-  from{ opacity:0; transform:scale(0.5); }
-  to{ opacity:1; transform:scale(1); }
+  from{transform:scale(0.6);}
+  to{transform:scale(1);}
 }
 
-/* 上传区域 */
-.upload-box{
-  margin-bottom: 20px;
-}
-#imgInput{
-  display: none;
-}
-.upload-btn{
-  padding: 10px 18px;
-  background: #9966ff;
-  color: #fff;
-  font-weight: bold;
-  border-radius: 16px;
-  border: 3px solid #d9b3ff;
-  cursor: pointer;
-  display: inline-block;
-}
-
-/* 图片列表 */
 .img-list{
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-top: 20px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  width:100%;
 }
 .img-item{
-  aspect-ratio: 1;
-  border: 3px solid #e6ccff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 0 #d9b3ff;
-  background: #fff;
+  aspect-ratio:1;
+  background:#fff;
+  border:3px solid #e6ccff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 4px 0 #d9b3ff;
+  position:relative;
 }
 .img-item img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.del-btn{
+  position:absolute;
+  top:4px;
+  right:4px;
+  width:24px;
+  height:24px;
+  background:#ff6699;
+  color:#fff;
+  border:none;
+  border-radius:50%;
+  font-size:12px;
+  cursor:pointer;
+  z-index:10;
 }
 
-/* 爱心按钮 */
+/* 按钮 */
+.btns{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:15px;
+  position:relative; z-index:2;
+}
+.upload-btn,.save-btn{
+  padding:10px 16px;
+  background:#9966ff;
+  color:#fff;
+  font-weight:bold;
+  border-radius:16px;
+  border:3px solid #d9b3ff;
+  cursor:pointer;
+}
+#imgInput{display:none;}
+
 .love-btn{
   width:90px;
   height:90px;
@@ -172,15 +201,15 @@ body::before{
   border:3px solid #ffc6f7;
   box-shadow:0 6px 0 #f5a6e7;
   cursor:pointer;
-  margin:20px auto 0;
-  display: inline-block;
+  margin:20px auto;
+  display:inline-block;
   position:relative; z-index:2;
 }
 
 .back{
   display:block;
   text-align:center;
-  margin-top:40px;
+  margin-top:30px;
   font-size:17px;
   font-weight:bold;
   color:#7a43e6;
@@ -192,34 +221,66 @@ body::before{
 
 <body>
 
-<h1 class="main-title">礼物盒<br>拆开这份礼物吧</h1>
+<h1 class="main-title">礼物盒<br>点爱心拆开份礼物吧</h1>
 
-<!-- 礼物盒 -->
-<div class="gift-box" id="giftBox">
-  <div class="lid"></div>
-  <div class="box"></div>
-</div>
-
-<!-- 拆开后显示相册 -->
-<div class="album" id="album">
-  <div class="upload-box">
-    <label for="imgInput" class="upload-btn">📸 添加礼物照片</label>
-    <input type="file" id="imgInput" accept="image/*" multiple>
+<!-- 礼盒 + 相册 同位置容器 -->
+<div class="wrapper">
+  <div class="gift-box" id="giftBox">
+    <div class="lid"></div>
+    <div class="box"></div>
   </div>
-  <div class="img-list" id="imgList"></div>
+
+  <div class="album" id="album">
+    <div class="img-list" id="imgList"></div>
+  </div>
 </div>
 
-<!-- 打开爱心按钮 -->
-<div class="love-btn" id="openBtn">❤️</div>
+<div class="btns">
+  <label for="imgInput" class="upload-btn">📸 添加照片</label>
+  <button class="save-btn" id="saveBtn">💾 保存</button>
+</div>
+<input type="file" id="imgInput" accept="image/*" multiple>
 
+<div class="love-btn" id="openBtn">❤️</div>
 <a href="index.html" class="back">返回首页</a>
 
 <script>
 const giftBox = document.getElementById('giftBox');
 const album = document.getElementById('album');
 const openBtn = document.getElementById('openBtn');
-const imgInput = document.getElementById('imgInput');
 const imgList = document.getElementById('imgList');
+const imgInput = document.getElementById('imgInput');
+const saveBtn = document.getElementById('saveBtn');
+
+let images = JSON.parse(localStorage.getItem('giftImages')) || [];
+
+// 渲染图片
+function render(){
+  imgList.innerHTML = '';
+  images.forEach((src, i) => {
+    const item = document.createElement('div');
+    item.className = 'img-item';
+    item.innerHTML = `
+      <img src="${src}">
+      <button class="del-btn" data-i="${i}">×</button>
+    `;
+    imgList.appendChild(item);
+  });
+
+  document.querySelectorAll('.del-btn').forEach(btn => {
+    btn.onclick = () => {
+      const i = btn.dataset.i;
+      images.splice(i, 1);
+      save();
+      render();
+    }
+  });
+}
+
+// 保存
+function save(){
+  localStorage.setItem('giftImages', JSON.stringify(images));
+}
 
 // 打开礼物
 openBtn.onclick = function(){
@@ -227,23 +288,29 @@ openBtn.onclick = function(){
   setTimeout(() => {
     album.classList.add('show');
   }, 1100);
-}
+};
 
-// 选择图片并显示
+// 添加图片
 imgInput.onchange = function(){
   const files = imgInput.files;
-  for(let i=0; i<files.length; i++){
-    const file = files[i];
+  for(let f of files){
     const reader = new FileReader();
-    reader.onload = function(e){
-      const div = document.createElement('div');
-      div.className = 'img-item';
-      div.innerHTML = `<img src="${e.target.result}">`;
-      imgList.appendChild(div);
-    }
-    reader.readAsDataURL(file);
+    reader.onload = e => {
+      images.push(e.target.result);
+      render();
+    };
+    reader.readAsDataURL(f);
   }
-}
+};
+
+// 保存按钮
+saveBtn.onclick = () => {
+  save();
+  alert('✅ 保存成功！');
+};
+
+// 初始化
+render();
 </script>
 
 </body>
