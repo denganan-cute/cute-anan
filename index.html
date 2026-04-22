@@ -367,7 +367,7 @@
         let currentImageIndex = 0;
         const images = document.querySelectorAll('.carousel-image');
         const totalImages = images.length;
-        let isLooping = false;
+        let isLooping = true;
 
         // 生成指示器
         const indicatorsContainer = document.getElementById('indicatorsContainer');
@@ -426,6 +426,10 @@
         updateCarousel();
         musicPlayer.volume = 0.7;
         musicPlayer.loop = true;
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('自动播放');
+            playMusic();
+        });
     </script>
 </body>
 </html>
