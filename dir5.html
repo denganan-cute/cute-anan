@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -150,6 +151,10 @@ body::before{
   overflow:hidden;
   box-shadow:0 4px 0 #d9b3ff;
   position:relative;
+  transition:0.2s;
+}
+.img-item:hover{
+  transform:scale(1.02);
 }
 .img-item img{
   width:100%;
@@ -169,6 +174,12 @@ body::before{
   font-size:12px;
   cursor:pointer;
   z-index:10;
+  opacity:0.8;
+  transition:0.2s;
+}
+.del-btn:hover{
+  opacity:1;
+  transform:scale(1.1);
 }
 
 /* 按钮 */
@@ -187,6 +198,10 @@ body::before{
   border-radius:16px;
   border:3px solid #d9b3ff;
   cursor:pointer;
+  transition:0.2s;
+}
+.upload-btn:hover,.save-btn:hover{
+  transform:translateY(-2px);
 }
 #imgInput{display:none;}
 
@@ -204,6 +219,10 @@ body::before{
   margin:20px auto;
   display:inline-block;
   position:relative; z-index:2;
+  transition:0.2s;
+}
+.love-btn:hover{
+  transform:scale(1.05);
 }
 
 .back{
@@ -221,7 +240,7 @@ body::before{
 
 <body>
 
-<h1 class="main-title">礼物盒<br>点爱心拆开礼物吧</h1>
+<h1 class="main-title">给安安的礼物盒<br>点爱心拆开礼物吧</h1>
 
 <!-- 礼盒 + 相册 同位置容器 -->
 <div class="wrapper">
@@ -237,7 +256,7 @@ body::before{
 
 <div class="btns">
   <label for="imgInput" class="upload-btn">📸 添加照片</label>
-  <button class="save-btn" id="saveBtn">💾 保存</button>
+  <button class="save-btn" id="saveBtn">💾 保存所有</button>
 </div>
 <input type="file" id="imgInput" accept="image/*" multiple>
 
@@ -252,65 +271,80 @@ const imgList = document.getElementById('imgList');
 const imgInput = document.getElementById('imgInput');
 const saveBtn = document.getElementById('saveBtn');
 
-let images = JSON.parse(localStorage.getItem('giftImages')) || [];
+// 从本地存储读取已保存的图片
+let images = JSON.parse(localStorage.getItem('giftImages_anan')) || [];
 
-// 渲染图片
-function render(){
+// 渲染图片列表
+function renderImages(){
   imgList.innerHTML = '';
-  images.forEach((src, i) => {
-    const item = document.createElement('div');
-    item.className = 'img-item';
-    item.innerHTML = `
-      <img src="${src}">
-      <button class="del-btn" data-i="${i}">×</button>
+  images.forEach((src, index) => {
+    const imgItem = document.createElement('div');
+    imgItem.className = 'img-item';
+    imgItem.innerHTML = `
+      <img src="${src}" alt="回忆照片">
+      <button class="del-btn" data-index="${index}">×</button>
     `;
-    imgList.appendChild(item);
+    imgList.appendChild(imgItem);
   });
 
+  // 绑定删除按钮事件
   document.querySelectorAll('.del-btn').forEach(btn => {
-    btn.onclick = () => {
-      const i = btn.dataset.i;
-      images.splice(i, 1);
-      save();
-      render();
-    }
+    btn.addEventListener('click', (e) => {
+      const index = parseInt(e.target.dataset.index);
+      // 删除对应图片
+      images.splice(index, 1);
+      // 自动保存
+      saveImages();
+      // 重新渲染
+      renderImages();
+    });
   });
 }
 
-// 保存
-function save(){
-  localStorage.setItem('giftImages', JSON.stringify(images));
+// 保存图片到本地存储（永久保存）
+function saveImages(){
+  localStorage.setItem('giftImages_anan', JSON.stringify(images));
 }
 
-// 打开礼物
-openBtn.onclick = function(){
+// 打开礼物盒动画
+openBtn.addEventListener('click', () => {
   giftBox.classList.add('open');
   setTimeout(() => {
     album.classList.add('show');
   }, 1100);
-};
+});
 
-// 添加图片
-imgInput.onchange = function(){
-  const files = imgInput.files;
-  for(let f of files){
+// 添加图片事件
+imgInput.addEventListener('change', (e) => {
+  const files = e.target.files;
+  if(files.length === 0) return;
+
+  // 处理所有选中的图片
+  Array.from(files).forEach(file => {
     const reader = new FileReader();
-    reader.onload = e => {
-      images.push(e.target.result);
-      render();
+    reader.onload = (event) => {
+      // 添加到图片数组
+      images.push(event.target.result);
+      // 自动保存
+      saveImages();
+      // 重新渲染
+      renderImages();
     };
-    reader.readAsDataURL(f);
-  }
-};
+    reader.readAsDataURL(file);
+  });
 
-// 保存按钮
-saveBtn.onclick = () => {
-  save();
-  alert('✅ 保存成功！');
-};
+  // 清空input，允许重复选择同一张图片
+  imgInput.value = '';
+});
 
-// 初始化
-render();
+// 手动保存按钮（双重保险）
+saveBtn.addEventListener('click', () => {
+  saveImages();
+  alert('✅ 所有照片已永久保存！\n关闭网页再打开也不会丢失哦～');
+});
+
+// 页面加载时自动渲染已保存的图片
+window.addEventListener('load', renderImages);
 </script>
 
 </body>
